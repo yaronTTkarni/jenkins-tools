@@ -1,0 +1,60 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.41">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.9.1"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.9.1">
+      <jobProperties>
+        <string>org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty</string>
+        <string>jenkins.model.BuildDiscarderProperty</string>
+      </jobProperties>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.plugins.jira.JiraProjectProperty plugin="jira@3.5"/>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>50</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty/>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.93">
+    <script>@Library(&apos;ci-cd-lib&apos;) _
+
+angularMsPipeline{
+        TEAM_NAME=&quot;team&quot;
+        PROJECT_NAME=&apos;%project_name%&apos;
+        PROJECT_TYPE=&apos;MICROSERVICE&apos;
+        GIT_URL=&quot;http://%git_user%:%git_password%@10.0.0.210/git/%git_repo_name%.git&quot;
+        ANGULAR_RELATIVE_PATH=&quot;web-dashboard&quot;
+        BRANCH_NAME=&apos;%release_name%&apos;
+        PARENT_BRANCH_NAME=&apos;%parent_branch_name%&apos;
+        ENABLE_BUILD_FEATURE=&apos;true&apos;
+        ENABLE_STATIC_CODE_ANALYSIS_FEATURE=&apos;false&apos;
+        ENABLE_UNIT_TEST_FEATURE=&apos;false&apos;
+        ENABLE_WHITE_SOURCE_FEATURE=&apos;false&apos;
+        ENABLE_DOCKER_FEATURE=&apos;true&apos;
+		ENABLE_HELM_FEATURE=&apos;true&apos;
+        ENABLE_FORCE_UPLOAD=&apos;true&apos;
+        ENABLE_RUN_STAGING=&apos;false&apos;
+        ENABLE_RUN_SANITY_TEST_STAGING=&apos;false&apos;
+        ENABLE_RUN_FULL_TEST_STAGING=&apos;false&apos;
+        IS_VERSION_OVERRIDE=&apos;true&apos;
+        MAJOR_VERSION=&quot;%version_major%&quot;
+        MINOR_VERSION=&quot;%version_minor%&quot;
+		PATCH_VERSION=&quot;%version_patch%&quot;
+		VERBOSE=&apos;false&apos;
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

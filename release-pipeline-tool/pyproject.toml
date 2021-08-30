@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "release-pipeline-tool"
+version = "1.0.3"
+description = ""
+authors = ["yaron <yaron@company.ai>"]
+packages = [
+    { include = "*.py" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+jenkins = "1.0.2"
+PyYamlObject = "0.9.3"
+setuptools = "57.4.0"
+python-jenkins = "^1.7.0"
+PyYAML = "^5.4.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

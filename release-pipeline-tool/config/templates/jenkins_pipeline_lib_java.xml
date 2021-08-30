@@ -1,0 +1,51 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.40">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@1.7.2"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@1.7.2">
+      <jobProperties>
+        <string>org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty</string>
+        <string>jenkins.model.BuildDiscarderProperty</string>
+      </jobProperties>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>50</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.DisableConcurrentBuildsJobProperty/>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers/>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.87">
+    <script>@Library(&apos;ci-cd-lib&apos;) _
+
+javaLibPipeline {
+    GIT_URL=&quot;http://%git_user%:%git_password%@10.0.0.210/git/%git_repo_name%.git&quot;
+    BRANCH_NAME=&apos;%release_name%&apos;
+    PROJECT_NAME=&apos;%release_name%-%git_repo_name%&apos;
+    PROJECT_TYPE=&apos;LIBRARY&apos;
+    ENABLE_BUILD_FEATURE=&apos;TRUE&apos;
+    ENABLE_STATIC_CODE_ANALYSIS_FEATURE=&apos;FALSE&apos;
+    ENABLE_UNIT_TEST_FEATURE=&apos;false&apos;
+    ENABLE_WHITE_SOURCE_FEATURE=&apos;true&apos;
+    ENABLE_FORCE_UPLOAD=&apos;true&apos;
+    RECIPIENTS_USERS_LIST=&apos;user_email;&apos;
+    VERBOSE=&apos;false&apos;
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
